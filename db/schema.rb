@@ -18,16 +18,6 @@ ActiveRecord::Schema.define(version: 2020_08_22_193846) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "sprints", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "user_sprints", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false

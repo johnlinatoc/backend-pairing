@@ -6,4 +6,27 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create(name: "John")
+data = {
+    "projectDurationMonths": 3,
+    "sprintDurationWeeks": 1,
+    "developers": [
+      {
+        "name": "Julia"
+      },
+      {
+        "name": "Xing"
+      },
+      {
+        "name": "Katie"
+      },
+      {
+        "name": "John"
+      },
+      {
+        "name": "Sarah"
+      }
+    ]
+}
+
+data[:developers].each {|dev| User.create(name: dev[:name])}
+a = Schedule.new(weeks: (data[:projectDurationMonths] * 4))
