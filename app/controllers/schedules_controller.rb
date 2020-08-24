@@ -39,6 +39,10 @@ class SchedulesController < ApplicationController
     @schedule.destroy
   end
 
+  def completed_schedule
+    #show all sprints associated with the specific schedule_id sent in
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_schedule

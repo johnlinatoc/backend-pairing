@@ -1,12 +1,17 @@
 require "user.rb"
 class Schedule < ApplicationRecord
     has_many :users
+    has_many :sprints
 
     def create_schedule
         developers = []
-        User.all.each {|user| developers.push(user.name)}
+        User.all.each {|user| developers.push(user)}
         pairs = {}
         weeks = self.weeks
+        weeks.times do
+            Sprint.create(schedule_id: self.id)
+        end
+        sprints = Sprint.where(schedule_id: self.id)
 
         if developers.length % 2 === 0 
             evenNumDevs(developers, pairs, weeks)
@@ -28,7 +33,8 @@ class Schedule < ApplicationRecord
             last_devs = (developers[(developers.length/2), first_devs.length]).reverse
 
             while count < first_devs.length
-                pairs[current_sprint].push([first_devs[count], last_devs[count]])
+                # pairs[current_sprint].push([first_devs[count], last_devs[count]])
+                # Sprint.create()
                 count += 1
             end
 
