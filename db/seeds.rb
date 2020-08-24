@@ -24,9 +24,6 @@ data = {
       },
       {
         "name": "Sarah"
-      },
-      {
-        "name": "jasmine"
       }
     ]
 }
@@ -34,4 +31,3 @@ data = {
 schedule = Schedule.create(weeks: (data[:projectDurationMonths] * 4))
 data[:developers].each {|dev| User.create(name: dev[:name], schedule_id: schedule.id)}
 a=schedule.create_schedule
-puts a

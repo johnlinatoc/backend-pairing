@@ -18,7 +18,8 @@ class SchedulesController < ApplicationController
     @schedule = Schedule.new(schedule_params)
 
     if @schedule.save
-      render json: @schedule, status: :created, location: @schedule
+      @completed_schedule = @schedule.create_schedule
+      render json: @completed_schedule, status: :created, location: @schedule
     else
       render json: @schedule.errors, status: :unprocessable_entity
     end
