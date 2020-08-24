@@ -20,8 +20,11 @@ ActiveRecord::Schema.define(version: 2020_08_22_193846) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
+    t.integer "schedule_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["schedule_id"], name: "index_users_on_schedule_id"
   end
 
+  add_foreign_key "users", "schedules"
 end
