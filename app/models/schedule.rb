@@ -1,6 +1,6 @@
 require "user.rb"
 class Schedule < ApplicationRecord
-    has_many :users
+    # has_many :users
     has_many :sprints
 
     def create_schedule
@@ -11,34 +11,37 @@ class Schedule < ApplicationRecord
         weeks.times do
             Sprint.create(schedule_id: self.id)
         end
-        sprints = Sprint.where(schedule_id: self.id)
+        sprints = []
+        Sprint.where(schedule_id: self.id).each {|sprint| sprints.push(sprint)}
 
         if developers.length % 2 === 0 
-            evenNumDevs(developers, pairs, weeks)
+            evenNumDevs(developers, pairs, weeks, sprints)
         else
-            oddNumDevs(developers, pairs, weeks)
+            oddNumDevs(developers, pairs, weeks, sprints)
         end
     end
 
-    def oddNumDevs(developers, pairs, weeks)
-        sprint = 1
-
-        while sprint <= weeks
-            current_sprint = "sprint #{sprint}"
-            pairs[current_sprint] = []
+    def oddNumDevs(developers, pairs, weeks, sprints)
+        sprint = 0
+            puts "made inside odd"
+        while sprint < weeks
             count = 0
             last_dev = developers.last
+            current_sprint = sprints[sprint]
 
             first_devs = developers[0...developers.length/2]
             last_devs = (developers[(developers.length/2), first_devs.length]).reverse
 
+            
             while count < first_devs.length
-                # pairs[current_sprint].push([first_devs[count], last_devs[count]])
-                # Sprint.create()
+                pair = Pair.create(sprint_id: current_sprint.id)
+                ScheduledPair.create(pair_id: pair.id, user_id: first_devs[count].id)
+                ScheduledPair.create(pair_id: pair.id, user_id: last_devs[count].id)
                 count += 1
             end
 
-            pairs[current_sprint].push([last_dev])
+            pair = Pair.create(sprint_id: current_sprint.id)
+            ScheduledPair.create(pair_id: pair.id, user_id: last_dev.id)
 
             developers.unshift(last_dev)
             developers.pop
@@ -47,7 +50,8 @@ class Schedule < ApplicationRecord
         JSON.generate(pairs)
     end
 
-    def evenNumDevs(developers, pairs, weeks)
+    def evenNumDevs(developers, pairs, weeks, sprints)
+        puts "made inside even"
         sprint = 1
         first_dev = developers[0]
         all_devs_except_first = developers[1..-1]

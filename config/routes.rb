@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :scheduled_pairs
+  resources :pairs
   resources :user_sprints
   resources :sprints
   resources :users

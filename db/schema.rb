@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_24_041046) do
+ActiveRecord::Schema.define(version: 2020_08_25_193847) do
+
+  create_table "pairs", force: :cascade do |t|
+    t.integer "sprint_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sprint_id"], name: "index_pairs_on_sprint_id"
+  end
+
+  create_table "scheduled_pairs", force: :cascade do |t|
+    t.integer "pair_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["pair_id"], name: "index_scheduled_pairs_on_pair_id"
+    t.index ["user_id"], name: "index_scheduled_pairs_on_user_id"
+  end
 
   create_table "schedules", force: :cascade do |t|
     t.integer "weeks"
@@ -25,25 +41,17 @@ ActiveRecord::Schema.define(version: 2020_08_24_041046) do
     t.index ["schedule_id"], name: "index_sprints_on_schedule_id"
   end
 
-  create_table "user_sprints", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "sprint_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["sprint_id"], name: "index_user_sprints_on_sprint_id"
-    t.index ["user_id"], name: "index_user_sprints_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.integer "schedule_id"
+    t.integer "pair_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["schedule_id"], name: "index_users_on_schedule_id"
+    t.index ["pair_id"], name: "index_users_on_pair_id"
   end
 
+  add_foreign_key "pairs", "sprints"
+  add_foreign_key "scheduled_pairs", "pairs"
+  add_foreign_key "scheduled_pairs", "users"
   add_foreign_key "sprints", "schedules"
-  add_foreign_key "user_sprints", "sprints"
-  add_foreign_key "user_sprints", "users"
-  add_foreign_key "users", "schedules"
+  add_foreign_key "users", "pairs"
 end
