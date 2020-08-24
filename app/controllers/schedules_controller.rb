@@ -1,5 +1,5 @@
 class SchedulesController < ApplicationController
-  before_action :set_schedule, only: [:show, :update, :destroy]
+  before_action :set_schedule, only: [:show, :update, :destroy, :completed_schedule]
 
   # GET /schedules
   def index
@@ -18,8 +18,8 @@ class SchedulesController < ApplicationController
     @schedule = Schedule.new(schedule_params)
 
     if @schedule.save
-      @completed_schedule = @schedule.create_schedule
-      render json: @completed_schedule, status: :created, location: @schedule
+      @schedule.create_schedule
+      render json: @schedule, status: :created, location: @schedule
     else
       render json: @schedule.errors, status: :unprocessable_entity
     end
@@ -39,8 +39,17 @@ class SchedulesController < ApplicationController
     @schedule.destroy
   end
 
+  #  /schedules/1/completed_schedule
   def completed_schedule
     #show all sprints associated with the specific schedule_id sent in
+    @completed_schedule = {}
+    @scheduled_sprints = Sprint.where(schedule_id: @schedule.id)
+
+    @scheduled_sprints.each do |sprint|
+      @completed_schedule["sprint #{sprint.id}"] = sprint.pairs.map {|pair| pair.users.map {|user| user.name}}
+    end
+
+    render json: @completed_schedule
   end
 
   private

@@ -24,6 +24,9 @@ data = {
       },
       {
         "name": "Sarah"
+      },
+      {
+        "name": "Mattie"
       }
     ]
 }

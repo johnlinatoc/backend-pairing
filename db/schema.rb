@@ -43,15 +43,12 @@ ActiveRecord::Schema.define(version: 2020_08_25_193847) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.integer "pair_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["pair_id"], name: "index_users_on_pair_id"
   end
 
   add_foreign_key "pairs", "sprints"
   add_foreign_key "scheduled_pairs", "pairs"
   add_foreign_key "scheduled_pairs", "users"
   add_foreign_key "sprints", "schedules"
-  add_foreign_key "users", "pairs"
 end

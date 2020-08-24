@@ -1,12 +1,10 @@
 require "user.rb"
 class Schedule < ApplicationRecord
-    # has_many :users
     has_many :sprints
 
     def create_schedule
         developers = []
         User.all.each {|user| developers.push(user)}
-        pairs = {}
         weeks = self.weeks
         weeks.times do
             Sprint.create(schedule_id: self.id)
@@ -15,13 +13,13 @@ class Schedule < ApplicationRecord
         Sprint.where(schedule_id: self.id).each {|sprint| sprints.push(sprint)}
 
         if developers.length % 2 === 0 
-            evenNumDevs(developers, pairs, weeks, sprints)
+            evenNumDevs(developers, weeks, sprints)
         else
-            oddNumDevs(developers, pairs, weeks, sprints)
+            oddNumDevs(developers, weeks, sprints)
         end
     end
 
-    def oddNumDevs(developers, pairs, weeks, sprints)
+    def oddNumDevs(developers, weeks, sprints)
         sprint = 0
             puts "made inside odd"
         while sprint < weeks
@@ -45,20 +43,19 @@ class Schedule < ApplicationRecord
 
             developers.unshift(last_dev)
             developers.pop
+            
             sprint += 1
         end
-        JSON.generate(pairs)
     end
 
-    def evenNumDevs(developers, pairs, weeks, sprints)
+    def evenNumDevs(developers, weeks, sprints)
         puts "made inside even"
-        sprint = 1
+        sprint = 0
         first_dev = developers[0]
         all_devs_except_first = developers[1..-1]
-
-        while sprint <= weeks
-            current_sprint = "sprint #{sprint}"
-            pairs[current_sprint] = []
+        
+        while sprint < weeks
+            current_sprint = sprints[sprint]
             count = 0
             last_dev = all_devs_except_first.last
 
@@ -67,7 +64,9 @@ class Schedule < ApplicationRecord
             first_devs.unshift(first_dev)
 
             while count < first_devs.length
-                pairs[current_sprint].push([first_devs[count], last_devs[count]])
+                pair = Pair.create(sprint_id: current_sprint.id)
+                ScheduledPair.create(pair_id: pair.id, user_id: first_devs[count].id)
+                ScheduledPair.create(pair_id: pair.id, user_id: last_devs[count].id)
                 count += 1
             end
 
@@ -77,6 +76,5 @@ class Schedule < ApplicationRecord
 
             sprint += 1
         end
-        JSON.generate(pairs)
     end
 end
