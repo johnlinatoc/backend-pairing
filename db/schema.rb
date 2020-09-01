@@ -12,16 +12,19 @@
 
 ActiveRecord::Schema.define(version: 2020_08_25_193847) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "pairs", force: :cascade do |t|
-    t.integer "sprint_id", null: false
+    t.bigint "sprint_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["sprint_id"], name: "index_pairs_on_sprint_id"
   end
 
   create_table "scheduled_pairs", force: :cascade do |t|
-    t.integer "pair_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "pair_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["pair_id"], name: "index_scheduled_pairs_on_pair_id"
@@ -35,7 +38,7 @@ ActiveRecord::Schema.define(version: 2020_08_25_193847) do
   end
 
   create_table "sprints", force: :cascade do |t|
-    t.integer "schedule_id", null: false
+    t.bigint "schedule_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["schedule_id"], name: "index_sprints_on_schedule_id"
