@@ -2,6 +2,7 @@ require "user.rb"
 class Schedule < ApplicationRecord
     has_many :sprints
 
+    # refactor User and Sprint methods
     def create_schedule
         developers = []
         User.all.each {|user| developers.push(user)}
@@ -13,13 +14,14 @@ class Schedule < ApplicationRecord
         Sprint.where(schedule_id: self.id).each {|sprint| sprints.push(sprint)}
 
         if developers.length % 2 === 0 
-            evenNumDevs(developers, weeks, sprints)
+            even_num_devs(developers, weeks, sprints)
         else
-            oddNumDevs(developers, weeks, sprints)
+            odd_num_devs(developers, weeks, sprints)
         end
     end
 
-    def oddNumDevs(developers, weeks, sprints)
+    # move some implementation to the other groups
+    def odd_num_devs(developers, weeks, sprints)
         sprint = 0
             puts "made inside odd"
         while sprint < weeks
@@ -48,7 +50,7 @@ class Schedule < ApplicationRecord
         end
     end
 
-    def evenNumDevs(developers, weeks, sprints)
+    def even_num_devs(developers, weeks, sprints)
         puts "made inside even"
         sprint = 0
         first_dev = developers[0]
