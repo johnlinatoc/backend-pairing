@@ -4,14 +4,9 @@ class Schedule < ApplicationRecord
 
     # refactor User and Sprint methods
     def create_schedule
-        developers = []
-        User.all.each {|user| developers.push(user)}
-        weeks = self.weeks
-        weeks.times do
-            Sprint.create(schedule_id: self.id)
-        end
-        sprints = []
-        Sprint.where(schedule_id: self.id).each {|sprint| sprints.push(sprint)}
+        self.weeks.times { Sprint.create(schedule_id: self.id) }
+        sprints = self.sprints
+        developers = User.all.to_a
 
         if developers.length % 2 === 0 
             even_num_devs(developers, weeks, sprints)
