@@ -1,29 +1,16 @@
 require 'rails_helper'
 
 describe Schedule, '#create_schedule' do
-  subject {described_class.new(weeks: 10)}
-  self.weeks.times { Sprint.create(schedule_id: self.id) }
-  devs = [
-    {
-      "name": "Julia"
-    },
-    {
-      "name": "Xing"
-    },
-    {
-      "name": "Katie"
-    },
-    {
-      "name": "John"
-    },
-    {
-      "name": "Sarah"
-    }
-  ]
-
+  schedule = Schedule.create(weeks: 10)
+  schedule.weeks.times do
+    Sprint.create(schedule_id: schedule.id)
+  end 
+  
+  
   context 'given even number of devs' do
     it 'calls even_num_devs' do 
-      puts Sprint.all
+      # expect(schedule)
+      puts User.all.count
     end
   end
   context 'given odd number of devs' do
